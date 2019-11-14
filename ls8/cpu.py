@@ -99,8 +99,6 @@ class CPU:
 
     def run(self):
         """Run the CPU."""
-        intructionRegister = []
-
         while self.pc < len(self.ram):
             self.mar = self.ram_read(self.pc)
 
