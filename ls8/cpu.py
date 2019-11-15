@@ -21,13 +21,22 @@ def halt(ram, pc, register):
     return 0
 
 
+def mult(ram, pc, register):
+    num_1_location = ram[pc + 1]
+    num_2_location = ram[pc + 2]
+    num_1 = register[num_1_location]
+    num_2 = register[num_2_location]
+    print(num_1 * num_2)
+    return 2
+
+
 class CPU:
     """Main CPU class."""
 
     def __init__(self):
         """Construct a new CPU."""
-        self.reg = [0] * 8
-        self.ram = [0] * 8
+        self.reg = [0b0] * 8
+        self.ram = [0b0] * 0xFF
         self.pc = 0
         self.mar = None  # holds address currently being read or written
         self.mdr = None  # holds value to write or value just read
@@ -38,6 +47,7 @@ class CPU:
         self.dispatch_table[0b10000010] = ldi
         self.dispatch_table[0b01000111] = prn
         self.dispatch_table[0b00000001] = halt
+        self.dispatch_table[0b10100010] = mult
 
     def load(self, program=[]):
         """Load a program into memory."""
