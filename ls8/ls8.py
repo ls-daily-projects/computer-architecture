@@ -2,15 +2,17 @@
 
 """Main."""
 
-from utils import *
+from utils import get_filename
+from ls8_parser import LS8Parser
 from cpu import *
 
 filename = get_filename()
-loc = load_lines_from_file(filename)
-clean_loc = parse_loc(loc)
+
+parser = LS8Parser()
+parser.parse(filename)
 
 cpu = CPU()
 
-cpu.load(clean_loc)
+cpu.load(parser.lines_of_code)
 
 cpu.run()
