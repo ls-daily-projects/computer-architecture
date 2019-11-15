@@ -24,7 +24,7 @@ def parse_loc(lines):
 def load_lines_from_file(filename):
     lines = []
 
-    with open(filename) as file:
+    with open(filename, "r") as file:
         for line in file:
             lines.append(line)
     return lines
