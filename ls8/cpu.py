@@ -1,16 +1,17 @@
 """CPU functionality."""
 
 import sys
+from ram import RAM
 
 
 def ldi(ram, pc, register):
-    value = ram[pc + 1]
-    register[value] = ram[pc + 2]
+    value = ram.read(pc + 1)
+    register[value] = ram.read(pc + 2)
     return 2
 
 
 def prn(ram, pc, register):
-    register_location = ram[pc + 1]
+    register_location = ram.read(pc + 1)
     register_value = register[register_location]
     print(register_value)
     return 1
@@ -22,8 +23,8 @@ def halt(ram, pc, register):
 
 
 def mult(ram, pc, register):
-    num_1_location = ram[pc + 1]
-    num_2_location = ram[pc + 2]
+    num_1_location = ram.read(pc + 1)
+    num_2_location = ram.read(pc + 2)
     num_1 = register[num_1_location]
     num_2 = register[num_2_location]
     print(num_1 * num_2)
@@ -36,7 +37,7 @@ class CPU:
     def __init__(self):
         """Construct a new CPU."""
         self.reg = [0b0] * 8
-        self.ram = [0b0] * 0xFF
+        self.ram = RAM()
         self.pc = 0
         self.mar = None  # holds address currently being read or written
         self.mdr = None  # holds value to write or value just read
@@ -57,15 +58,15 @@ class CPU:
         program = [int(line, 2) for line in program]
 
         for instruction in program:
-            self.ram[address] = instruction
+            self.ram.write(address, instruction)
             address += 1
 
     def ram_read(self, address):
         """Takes an address and returns the corresponding value in MAR"""
-        return self.ram[address]
+        return self.ram.read(address)
 
     def ram_write(self, address, value):
-        self.ram[address] = value
+        self.ram.write(address, value)
         return self
 
     def alu(self, op, reg_a, reg_b):
